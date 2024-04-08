@@ -1,16 +1,31 @@
 #!/bin/bash
 
 #SBATCH --job-name test-script
-#SBATCH --output=/home/users/allstaff/ling.j/trial_slurm/result-%j.out
 #SBATCH --mem=4G
 
 module load anaconda3/latest
 
 conda activate base
 
-PYTHON_SCRIPT="/home/users/allstaff/ling.j/trial_slurm/scripts/Edge Based Segmentation/helloworld.py"
+USERNAME="$USER"
 
-/stornext/System/data/apps/anaconda3/anaconda3-latest/bin/python "$PYTHON_SCRIPT"
+#SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" &>/dev/null && pwd)"
+
+SCRIPT_DIR="$1"
+
+FILENAME="helloworld.py"
+
+#PYTHON_SCRIPT="${SCRIPT_DIR}/Edge Based Segmentation/${FILENAME}"
+
+PYTHON_SCRIPT="${SCRIPT_DIR%/}/${FILENAME}"
+
+# PYTHON_SCRIPT="/home/users/allstaff/ling.j/trial_slurm/scripts/Edge Based Segmentation/helloworld.py"
+
+# OUTPUT_LOCATION="/home/users/allstaff/ling.j/Scikit-Coins/scripts/Edge Based Segmentation/edge_based.png"
+
+OUTPUT_LOCATION="$2"
+
+/stornext/System/data/apps/anaconda3/anaconda3-latest/bin/python "$PYTHON_SCRIPT" "$OUTPUT_LOCATION"
 
 conda deactivate
 

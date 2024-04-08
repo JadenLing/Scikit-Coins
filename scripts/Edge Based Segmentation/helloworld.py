@@ -3,6 +3,9 @@ from skimage.exposure import histogram
 import numpy as np
 import matplotlib.pyplot as plt
 import scipy as sp
+import sys
+
+output_location = sys.argv[1]
 
 coins = ski.data.coins()
 hist, hist_centers = ski.exposure.histogram(coins)
@@ -20,5 +23,5 @@ coins_cleaned = mask_sizes[label_objects]
 
 plt.imshow(coins_cleaned, cmap="gray")
 plt.axis('off')
-plt.savefig("edge_based.png")
+plt.savefig(output_location)
 plt.close()

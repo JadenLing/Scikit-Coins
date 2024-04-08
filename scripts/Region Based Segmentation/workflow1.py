@@ -3,6 +3,10 @@ from skimage.exposure import histogram
 import numpy as np
 import matplotlib.pyplot as plt
 import scipy as sp
+import sys
+
+output_location = sys.argv[1]
+
 coins = ski.data.coins()
 hist, hist_centers = ski.exposure.histogram(coins)
 
@@ -19,5 +23,5 @@ segmentation = sp.ndimage.binary_fill_holes(segmentation - 1)
 plt.imshow(segmentation, cmap='gray')
 plt.axis('off')
 plt.title("Segmentation")
-plt.savefig("region_based.png")
+plt.savefig(output_location)
 plt.close()

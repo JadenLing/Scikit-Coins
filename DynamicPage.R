@@ -1,7 +1,9 @@
 library(shiny)
 
 # Mock scripts list
+setwd("~/Scikit-Coins")
 scripts <- "./scripts"
+scripts_dir <- normalizePath("./scripts", mustWork = TRUE)
 
 # Define UI
 ui <- fluidPage(
@@ -19,19 +21,22 @@ server <- function(input, output) {
   output$dynamic_ui <- renderUI({
     if (input$workflow == "Edge Based Segmentation") {
       # Interface for Script A
+      # output <- paste0(scripts_dir, "/Edge Based Segmentation/edge_based.png")
+      output <- file.path(scripts_dir, shQuote("Edge Based Segmentation"), "edge_based.png")
       fluidRow(
         column(3),  # Offset by three columns
         column(5, textInput("output_location", "Output Location", 
-                            value = "/home/users/allstaff/ling.j/trial_slurm/output.txt")),
+                            value = output)),
         column(4)  # Offset by three columns
       )
     } else if (input$workflow == "Region Based Segmentation") {
       # Interface for Script B
+      output <- file.path(scripts_dir, shQuote("Region Based Segmentation"), "region_based.png")
       fluidRow(
-        column(4),  # Offset by four columns
-        column(2, numericInput("input_b1", "Input for B1", value = 5)),
-        column(2, checkboxInput("input_b2", "Option for B2", value = TRUE)),
-        column(4)  # Offset by four columns
+        column(3),  # Offset by three columns
+        column(5, textInput("output_location", "Output Location", 
+                            value = output)),
+        column(4)  # Offset by three columns
       )
     }
   })
@@ -39,17 +44,20 @@ server <- function(input, output) {
   observeEvent(input$submit_job, {
     # Depending on the script, construct the command differently
     if (input$workflow == "Edge Based Segmentation") {
-      sbatch_command <- sprintf("sbatch testscript.sh")
-      # Construct the command for Script A using input$input_a1 and input$input_a2
+      script_file_folder <- file.path(scripts_dir, shQuote("Edge Based Segmentation"))
+      script_file_path <- file.path(scripts_dir, shQuote("Edge Based Segmentation"), "testscript.sh")
+      # sbatch_command <- sprintf("sbatch %s %s %s", script_file_path, script_file_folder, input$output_location)
+      
+
     } else if (input$workflow == "Region Based Segmentation") {
-      sbatch_command <- sprintf("sbatch testscript.sh")
+      script_file_folder <- file.path(scripts_dir, shQuote("Region Based Segmentation"))
+      script_file_path <- file.path(scripts_dir, shQuote("Region Based Segmentation"), "testscript.sh")
+      
       # Construct the command for Script B using input$input_b1 and input$input_b2
     }
     
+    sbatch_command <- sprintf("sbatch %s %s %s", script_file_path, script_file_folder, input$output_location)
     
-    # Example sbatch command (you would adjust this based on the selected script and inputs)
-    # sbatch_command <- sprintf("sbatch your_script.sh")
-    # Example system call (adjust according to your actual command construction logic)
     # result <- system(sbatch_command, intern = TRUE)
     
     ## IMPORTANT: Try to get the output location to work properly in the script
@@ -57,8 +65,8 @@ server <- function(input, output) {
     # Example placeholder for job submission output
     output$job_output <- renderText({
       # Replace this with the actual submission result
-      result <- system("ls", intern = TRUE)
-      
+      result <- system(sbatch_command, intern = TRUE)
+
       paste("Job submission output:", result, sep = "\n")
       # paste("Pretend submission output for", input$workflow)
     })
