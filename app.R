@@ -1,7 +1,7 @@
 library(shiny)
 
 # Mock scripts list
-setwd("~/Scikit-Coins")
+# setwd("~/Scikit-Coins")
 scripts <- "./scripts"
 scripts_dir <- normalizePath("./scripts", mustWork = TRUE)
 
@@ -10,12 +10,25 @@ ui <- fluidPage(
   titlePanel("Dynamic SLURM Job Submission App"),
   selectInput("workflow", "Select workflow", list.files(scripts)),
   uiOutput("dynamic_ui"),  # This will dynamically change based on the script selected
+  uiOutput("file_select"),
+  fileInput("file2", "Choose file to upload"),
   actionButton("submit_job", "Submit SLURM Job"),
   verbatimTextOutput("job_output")
 )
 
 # Define server logic
 server <- function(input, output) {
+  
+  # Directory in HPC system where the files are stored 
+  hpc_files_dir <- "~"
+  
+  # List files in the directory to select from
+  available_files <- list.files(hpc_files_dir, full.names = TRUE)
+  
+  # Update the select input with the list of files
+  output$file_select <- renderUI({
+    selectInput("selected_file", "Choose a file:", available_files)
+  })
   
   # Dynamic UI based on the selected workflow
   output$dynamic_ui <- renderUI({

@@ -1,0 +1,74 @@
+library(shiny)
+
+# Define UI
+ui <- fluidPage(
+  titlePanel("Directory Browser"),
+  textInput("dirpath", "Enter directory path:", value = "~/"),
+  actionButton("go", "Go"),
+  uiOutput("file_list_ui"),
+  verbatimTextOutput("selected_file")
+)
+
+# Define server logic
+server <- function(input, output, session) {
+  current_dir <- reactiveVal(getwd()) # Reactive value to store current directory
+  
+  observeEvent(input$go, {
+    # Update current directory when 'Go' is clicked
+    tryCatch({
+      new_dir <- normalizePath(input$dirpath, mustWork = TRUE)
+      current_dir(new_dir)
+    }, error = function(e) {
+      # Handle error if path is not valid
+      current_dir(getwd())
+      showModal(modalDialog(
+        title = "Error",
+        "Invalid directory path. Please enter a valid path."
+      ))
+    })
+  })
+  
+  output$file_list_ui <- renderUI({
+    # List files and directories in the current directory
+    dir_contents <- list.files(current_dir(), full.names = TRUE)
+    file_paths <- lapply(dir_contents, function(path) {
+      btn_id <- gsub("[[:punct:]]", "", basename(path)) # Clean-up ID
+      if (file.info(path)$isdir) {
+        actionButton(btn_id, label = basename(path), class = "dir-button")
+      } else {
+        actionButton(btn_id, label = basename(path), class = "file-button")
+      }
+    })
+    do.call(tagList, file_paths) # Return a list of buttons
+  })
+  
+  # Detect any button click
+  observe({
+    dir_contents <- list.files(current_dir(), full.names = TRUE)
+    for (path in dir_contents) {
+      # output$selected_file <- renderText({paste(dir_contents)})
+      # btn_id <- gsub("[[:punct:]]", "", basename(path))
+    }
+  })
+  # observe({
+  #   dir_contents <- list.files(current_dir(), full.names = TRUE)
+  #   for (path in dir_contents) {
+  #     btn_id <- gsub("[[:punct:]]", "", basename(path))
+  #     if (file.info(path)$isdir) {
+  #       # If it's a directory, change to that directory when clicked
+  #       observeEvent(input[[btn_id]], {
+  #         current_dir(path)
+  #         updateTextInput(session, "dirpath", value = path)
+  #       }, ignoreNULL = FALSE)
+  #     } else {
+  #       # If it's a file, update the selected file output
+  #       observeEvent(input[[btn_id]], {
+  #         output$selected_file <- renderText({ path })
+  #       }, ignoreNULL = FALSE)
+  #     }
+  #   }
+  # })
+}
+
+# Run the app
+shinyApp(ui = ui, server = server)
