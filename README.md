@@ -24,7 +24,6 @@ As per the Subject Matter Expert's (Lachie) recommendation, we have implemented 
    - R Version: 4.2.3
    - CPUs: 4
    - Memory: 8GB
-*IMPORTANT* If you are a new user
    - Additional Modules: R shiny
   
 3. Specify the Shiny App directory: `/home/users/allstaff/<username>/Scikit-Coins` (use a directory, not a file name).
