@@ -10,9 +10,9 @@ ui <- fluidPage(
   titlePanel("Dynamic SLURM Job Submission App"),
   selectInput("workflow", "Select workflow", list.files(scripts)),
   uiOutput("dynamic_ui"),  # This will dynamically change based on the script selected
-  uiOutput("file_select"),
+  # uiOutput("file_select"),
   # fileInput("file2", "Choose file to upload"),
-  # actionButton("submit_job", "Submit SLURM Job"),
+  actionButton("submit_job", "Submit SLURM Job"),
   verbatimTextOutput("job_output")
 )
 
