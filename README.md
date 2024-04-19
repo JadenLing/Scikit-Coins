@@ -15,7 +15,7 @@ As per the Subject Matter Expert's (Lachie) recommendation, we have implemented 
 1. Log into OnDemand.
 2. Navigate to **CLUSTERS -> SLURM SHELL ACCESS**.
 3. Enter your password (note that it won't be displayed on the screen).
-4. Clone the repository: `git clone https://github.com/JadenLing/Scikit-Coins.git`.
+4. Clone the repository: `(https://github.com/JadenLing/imaging_shiny.git)`.
 
 #### Launching OnDemand Shiny App
 1. Navigate to **Shiny App** setup.
@@ -26,7 +26,7 @@ As per the Subject Matter Expert's (Lachie) recommendation, we have implemented 
    - Memory: 8GB
    - Additional Modules: R shiny
   
-3. Specify the Shiny App directory: `/home/users/allstaff/<username>/Scikit-Coins` (use a directory, not a file name).
+3. Specify the Shiny App directory: `/home/users/allstaff/<username>/imaging_shiny` (use a directory, not a file name).
    - For a basic app, name the file `app.R`.
    - For an app with both UI and server files, name them `ui.R` and `server.R` respectively.
 4. If there are issues, consult the session log and output log.
