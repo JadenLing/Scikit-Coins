@@ -25,6 +25,7 @@ As per the Subject Matter Expert's (Lachie) recommendation, we have implemented 
    - CPUs: 4
    - Memory: 8GB
    - Additional Modules: R shiny
+     -   Note that if you have the library shiny installed in R already, please leave the additional modules blank 
   
 3. Specify the Shiny App directory: `/home/users/allstaff/<username>/imaging_shiny` (use a directory, not a file name).
    - For a basic app, name the file `app.R`.
