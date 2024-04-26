@@ -4,17 +4,72 @@ library(shiny)
 # setwd("~/Scikit-Coins")
 scripts <- "./workflows"
 scripts_dir <- normalizePath("./workflows", mustWork = TRUE)
+home_dir <- normalizePath("~", mustWork = TRUE)
 
-# Define UI
 ui <- fluidPage(
-  titlePanel("Dynamic SLURM Job Submission App"),
-  selectInput("workflow", "Select workflow", list.files(scripts)),
-  uiOutput("dynamic_ui"),  # This will dynamically change based on the script selected
-  # uiOutput("file_select"),
-  # fileInput("file2", "Choose file to upload"),
-  actionButton("submit_job", "Submit SLURM Job"),
-  verbatimTextOutput("job_output")
+  tags$head(
+    tags$style(HTML("
+      .container-fluid {
+        margin-top: 20px;
+      }
+      .logo-container {
+        height: 150px; /* Adjust the height as needed */
+        margin-bottom: 20px; /* Add margin to separate from other elements */
+      }
+      .custom-panel {
+        background-color: #ffffff;
+        padding: 50px;
+        border-radius: 20px;
+        box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+        margin-bottom: 20px;
+      }
+      .btn-primary {
+        background-color: #007bff;
+        border-color: #007bff;
+        color: #fff;
+      }
+      .btn-primary:hover {
+        background-color: #0056b3;
+        border-color: #0056b3;
+        color: #fff;
+      }
+      .input-primary input[type='text'] {
+        width: 40%;
+        min-width: 500px;
+      } #logo {
+        position: absolute;
+        top: 10px;
+        left: 10px;
+        width: 300px; /* Adjust the width as needed */
+        height: auto;
+      }
+    "))
+  ),
+  div(class = "logo-container",
+      tags$img(src = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS3texyMB4zGZLeQYZ33OeeyARFPDZ4wFytCNSJF7zM&s", id = "logo")
+  ),
+  div(style = "text-align: center; margin: 2.5%",
+      tags$h1('Dynamic SLURM Job Submission App')
+  ),
+  div(class = "container-fluid custom-panel",
+      selectInput("workflow", "Select workflow", choices = c(list.files(scripts))),
+      uiOutput("dynamic_ui"),
+      actionButton("submit_job", "Submit SLURM Job", class = "btn-primary"),
+      br(),
+      verbatimTextOutput("job_output")
+  )
 )
+
+# # Define UI
+# ui <- fluidPage(
+#   titlePanel("Dynamic SLURM Job Submission App"),
+#   selectInput("workflow", "Select workflow", list.files(scripts)),
+#   uiOutput("dynamic_ui"),  # This will dynamically change based on the script selected
+#   # uiOutput("file_select"),
+#   # fileInput("file2", "Choose file to upload"),
+#   actionButton("submit_job", "Submit SLURM Job"),
+#   verbatimTextOutput("job_output")
+# )
 
 # Define server logic
 server <- function(input, output) {
@@ -33,21 +88,27 @@ server <- function(input, output) {
   # Dynamic UI based on the selected workflow
   output$dynamic_ui <- renderUI({
     if (input$workflow == "Edge Based Segmentation") {
-      # Interface for Script A
-      # output <- paste0(scripts_dir, "/Edge Based Segmentation/edge_based.png")
-      output_loc <- file.path(scripts_dir, shQuote("Edge Based Segmentation"), "edge_based.png")
+      
+      # Interface for Edge Based Segmentation
+      
+      # output_loc <- file.path(scripts_dir, shQuote("Edge Based Segmentation"), "edge_based.png")
+      
+      output_loc <- file.path(home_dir, "edge_based.png")
       fluidRow(
         column(3),  # Offset by three columns
-        column(5, textInput("output_location", "Output Location", 
+        column(5, textInput("output_location", "Output Location (Must be a png file)", 
                             value = output_loc)),
         column(4)  # Offset by three columns
       )
+      
     } else if (input$workflow == "Region Based Segmentation") {
       # Interface for Script B
-      output_loc <- file.path(scripts_dir, shQuote("Region Based Segmentation"), "region_based.png")
+      # output_loc <- file.path(scripts_dir, shQuote("Region Based Segmentation"), "region_based.png")
+      
+      output_loc <- file.path(home_dir, "region_based.png")
       fluidRow(
         column(3),  # Offset by three columns
-        column(5, textInput("output_location", "Output Location", 
+        column(5, textInput("output_location", "Output Location (Must be a png file)", 
                             value = output_loc)),
         column(4)  # Offset by three columns
       )
