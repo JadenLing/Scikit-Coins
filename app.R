@@ -102,7 +102,6 @@ server <- function(input, output) {
       )
       
     } else if (input$workflow == "Region Based Segmentation") {
-      # Interface for Script B
       # output_loc <- file.path(scripts_dir, shQuote("Region Based Segmentation"), "region_based.png")
       
       output_loc <- file.path(home_dir, "region_based.png")
