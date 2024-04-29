@@ -4,7 +4,7 @@ There are directories for each workflow. Each workflow will contain a .sh file, 
 
 ### Edge and Region Based Segmenetation
 
-This is the workflows that Lachie suggested to implement from Scikit Coins. These workflows do not require input data since the data is from a sk library
+This is the workflows that Lachie suggested to implement from Scikit Coins. These workflows do not require input data since the data is from a sk library. Details on this can be found [here](https://scikit-image.org/docs/stable/user_guide/tutorial_segmentation.html)
 
 ### HDAB
 
