@@ -48,7 +48,7 @@ ui <- fluidPage(
   div(class = "logo-container",
       tags$img(src = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS3texyMB4zGZLeQYZ33OeeyARFPDZ4wFytCNSJF7zM&s", id = "logo")
   ),
-  div(style = "text-align: center; margin: 2.5%",
+  div(style = "text-align: center; margin: 2.5%", 
       tags$h1('Dynamic SLURM Job Submission App')
   ),
   div(class = "container-fluid custom-panel",
@@ -94,32 +94,31 @@ server <- function(input, output) {
       # output_loc <- file.path(scripts_dir, shQuote("Edge Based Segmentation"), "edge_based.png")
       
       output_loc <- file.path(home_dir, "edge_based.png")
-      fluidRow(
-        column(3),  # Offset by three columns
-        column(5, textInput("output_location", "Output Location (Must be a png file)", 
+      fluidRow(  
+        column(8, textInput("output_location", "Output Location (Must be a png file)", 
                             value = output_loc)),
-        column(4)  # Offset by three columns
+        column(2)  # Offset by two columns
       )
       
     } else if (input$workflow == "Region Based Segmentation") {
+      # Interface for Script B
       # output_loc <- file.path(scripts_dir, shQuote("Region Based Segmentation"), "region_based.png")
       
       output_loc <- file.path(home_dir, "region_based.png")
       fluidRow(
-        column(3),  # Offset by three columns
-        column(5, textInput("output_location", "Output Location (Must be a png file)", 
+        column(8, textInput("output_location", "Output Location (Must be a png file)", 
                             value = output_loc)),
-        column(4)  # Offset by three columns
+        column(2)  # Offset by two columns
       )
     } else if (input$workflow == "HDAB") {
       file_loc <- file.path(scripts_dir, shQuote("HDAB"))
       
       fluidRow(
-        column(6, textInput("input_location", "Input Location", 
-                            value = file_loc)),
+        column(8, textInput("input_location", "Input Location", 
+                            value = file_loc), class = "input-primary"),
       
-        column(6, textInput("output_location", "Output Location", 
-                            value = file_loc))
+        column(8, textInput("output_location", "Output Location", 
+                            value = file_loc), class = "input-primary")
       )
     }
   })
@@ -165,4 +164,3 @@ server <- function(input, output) {
 
 # Run the app
 shinyApp(ui = ui, server = server)
-
